@@ -19,37 +19,36 @@ public class TasksStepDefinition {
 		seleniumUtils = new SeleniumUtils();
 	}
 
-	// login et mot de passe vide
+	// login et/ou mot de passe vide
 
 	@Given("Je me rends sur le site {string}")
 	public void jeMeRendsSurLeSite(String url) {
 		tasksPage.ConnectURL();
 	}
 
-	@When("les champs login et mot de passe sont vides")
+	@When("les champs login et/ou mot de passe sont vides")
 	public void jeVideChamps() {
-		tasksPage.textLogin.clear();
-		tasksPage.textPassword.clear();
+		String login=tasksPage.textLogin.getText();
+		String pwd=tasksPage.textPassword.getText();
+		if (login.length()==0 && pwd.length()!=0)
+		{
+			tasksPage.textLogin.clear();
+		}
+		else if (login.length()!=0 && pwd.length()==0)
+		{
+			tasksPage.textPassword.clear();
+		}
+		else 
+		{
+			tasksPage.textLogin.clear();
+			tasksPage.textPassword.clear();
+		}
 	}
 
 	@Then("Je vérifie que le bouton de connexion est non cliquable")
 	public void jeVérifieQueLeBoutonDeConnexionEstNonCliquable() {
 		Boolean etatBtn = tasksPage.loginBtn.isEnabled();
 		Assert.assertFalse(etatBtn);
-	}
-
-	// Saisir login mais mot de passe vide
-	@When("Je saisie le login {string} et je vide le mot de passe")
-	public void jeVidePWDNotLogin(String log) {
-		tasksPage.textLogin.sendKeys(log);
-		tasksPage.textPassword.clear();
-	}
-
-	// Vider le login mais je saisi le mot de passe
-	@When("Je vide le login et je  saisie le mot de passe {string}")
-	public void jeVideLoginNotPWD(String PWD) {
-		tasksPage.textLogin.clear();
-		tasksPage.textPassword.sendKeys(PWD);
 	}
 
 	// Se connecter avec Login et PWD non valides
@@ -69,6 +68,12 @@ public class TasksStepDefinition {
 		boolean showMsg = seleniumUtils.isElementDisplayed(tasksPage.alertMessage);
 		Assert.assertTrue(showMsg);
 	}
+	
+	@Then("les liens {string} {string} ne sont pas affichés")
+	public void jeVérifieLienDisplayed() {
+		boolean showMsg = seleniumUtils.isElementDisplayed(tasksPage.alertMessage);
+		Assert.assertTrue(showMsg);
+	}
 
 	// Se connecter avec Login et PWD valides
 	@When("Je me connecte")
@@ -79,5 +84,13 @@ public class TasksStepDefinition {
 	@Then("la page change")
 	public void LaPageChange() {
 		tasksPage.checkUrlChanged();
+	}
+	
+	@Then("les liens {string} {string} sont affichés")
+	public void jeVérifieQueLesLiensSontAffiches(String linkTasks, String linkLogout) {
+		String link_tasks = TasksPage.lienTasks.getText();
+		String link_logout = TasksPage.lienDeconnexion.getText();
+		Assert.assertEquals(link_tasks,linkTasks);
+		Assert.assertEquals(link_logout,linkLogout);
 	}
 }

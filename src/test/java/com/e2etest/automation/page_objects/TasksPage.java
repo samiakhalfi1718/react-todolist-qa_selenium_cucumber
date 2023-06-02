@@ -18,6 +18,8 @@ public class TasksPage {
 	final static String PASSWORD = "//input[@type='password']";
 	final static String ALERT_MSG= "//*[@class='alert alert-danger']";
 	final static String BUTTON_CONNEXION = "//*[@type='submit']";
+	final static String LIEN_DECONNEXION = "//*[@id=\"navbarSupportedContent\"]/ul/li[3]/a";
+	final static String LIEN_TASKS = "//*[@id=\"navbarSupportedContent\"]/ul/li[2]/a";
 	
 	/* @FindBy */
 	@FindBy(how = How.XPATH, using = LOGIN)
@@ -28,6 +30,11 @@ public class TasksPage {
 	public static WebElement loginBtn;
 	@FindBy(how = How.XPATH, using = ALERT_MSG)
 	public static WebElement alertMessage;
+	@FindBy(how = How.XPATH, using = LIEN_DECONNEXION)
+	public static WebElement lienDeconnexion;
+	@FindBy(how = How.XPATH, using = LIEN_TASKS)
+	public static WebElement lienTasks;
+	
 	
 	public TasksPage() {
 		configFileReader = new ConfigFileReader();
